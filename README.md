@@ -1,16 +1,25 @@
-Ao apagar um autor que tem vários livros, os livros que correspondem aquele autor devem ser apagados juntos;
+1 - Cadastro de Autores
 
-📝 Perguntas e respostas | Atividade relacionamentos - desafio
+Foi implementado um formulário para cadastrar autores sem utilizar o painel administrativo do Django.
+
+O formulário possui os campos:
+- Nome (obrigatório).
+- Nacionalidade (opcional).
+
+Foram utilizados ModelForm, validação dos campos e mensagens de erro em português.
+
+Também foi implementada a proteção CSRF através da tag `{% csrf_token %}`.
 
 
-1. Que dados se perdem quando a migração é revertida? Por quê?
+2 - Teste de proteção CSRF
 
-Resposta: Perdem-se os vínculos de coautoria. Se um livro possuía mais de um autor cadastrado no campo ManyToManyField, ao reverter para ForeignKey, o banco de dados volta a aceitar apenas um único autor por livro. O script de reversão (reverse_code) captura apenas o primeiro autor retornado, fazendo com que o vínculo com o segundo, terceiro ou demais autores daquele livro seja permanentemente apagado.
+Ao remover `{% csrf_token %}` do template e tentar enviar o formulário, o Django retorna o erro HTTP 403 (Forbidden), pois a requisição não possui o token de segurança necessário.
 
-2. Com ManyToMany, o que acontece com um livro quando o seu único autor é apagado? Como garantir que todo livro tenha pelo menos um autor?
+Após adicionar novamente a tag, o formulário funciona normalmente.
 
-Resposta:
-• O que acontece: Ao contrário da ForeignKey, que possui propriedades como on_delete=models.CASCADE, o relacionamento ManyToManyField cria uma tabela intermediária oculta. Se o único autor de um livro for deletado, a linha que ligava o autor ao livro na tabela intermediária é apagada, mas o livro continua existindo no banco de dados, tornando-se um livro "órfão" (sem nenhum autor associado).
-• Como garantir que todo livro tenha pelo menos um autor: No ecossistema do Django, campos ManyToManyField não aceitam restrições de nível de banco de dados do tipo NOT NULL. Para garantir essa validação, precisamos atuar na camada da aplicação:
-	1. No Admin: Sobrescrever o método clean() do formulário do admin ou do próprio modelo para lançar um erro de validação se a contagem de autores for menor que 1.
-	2. No Django Signals: Utilizar o sinal m2m_changed do Django. Ele monitora a tabela intermediária e pode impedir transações ou disparar alertas caso uma remoção deixe a lista de autores vazia.
+3 - Redirecionamento
+
+
+Após cadastrar um autor com sucesso, o usuário é redirecionado para a página de detalhes do autor.
+
+Foi utilizado o padrão POST/Redirect/GET para evitar que a atualização da página envie novamente o formulário e crie autores duplicados.
