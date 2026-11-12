@@ -5,4 +5,6 @@ urlpatterns = [
     path('', listar_livros, name='listar_livros'),
     path('autores/<int:id>/', autor, name='autor'),
     path('autores/novo/', novo_autor, name='novo_autor'),
+    path('livros/novo/', cadastrar_editar_livro, name='novo_livro'),
+
 ]
