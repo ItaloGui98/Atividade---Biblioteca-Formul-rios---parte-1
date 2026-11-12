@@ -94,6 +94,7 @@
             <th>Autor</th>
             <th>Ano de Publicação</th>
             <th>Status</th>
+            <th>Ações</th>
         </tr>
 
         {% for livro in livros %}
@@ -130,6 +131,9 @@
                 {% endif %}
             </td>
 
+            <td>
+                <a href="{% url 'editar_livro' livro.id %}">Editar</a>
+            </td>
         </tr>
 
         {% empty %}
@@ -138,11 +142,14 @@
             <td colspan="4">
                 Nenhum livro cadastrado.
             </td>
-        </tr>
-
+        </tr^>
+    
         {% endfor %}
 
     </table>
+    <a class="botao" href="{% url 'novo_livro' %}">
+        Cadastrar Novo Livro
+    </a>
 
 
     <br>
