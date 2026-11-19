@@ -54,4 +54,4 @@ def cadastrar_editar_livro(request, livro_id=None):
         'texto_botao': 'Salvar alterações' if livro else 'Cadastrar livro',
     }
 
-    return render(request, 'biblioteca/form_livros.html', contexto)
+    return render(request, 'biblioteca/forms/form_livros.html', contexto)
