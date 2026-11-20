@@ -1,7 +1,8 @@
 from django.core import validators
 from django.db import models
-from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, RegexValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, RegexValidator, FileExtensionValidator
 from django.utils import timezone
+from .validators import validar_tamanho_arquivo
 
 
 class Autor(models.Model):
@@ -36,10 +37,10 @@ class Livro(models.Model):
         blank=True
     )
 
-    ano_publicacao = models.IntegerField(validators=[MinLengthValidator(1450), MaxValueValidator(timezone.now().year)])
-    paginas = models.IntegerField(validators=[MinLengthValidator(1), MaxValueValidator(5000)], null=True, blank=True)
+    ano_publicacao = models.IntegerField(validators=[MinValueValidator(1450), MaxValueValidator(timezone.now().year)])
+    paginas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5000)], null=True, blank=True)
     disponivel = models.BooleanField(default=True)
     isbn = models.CharField(max_length=13, validators=[RegexValidator(regex=r'^\d{13}$',message='O ISBN deve conter exatamente 13 dígitos.')], null=True, blank=True)
-    
+    capa = models.ImageField(upload_to='capas/', validators=[validar_tamanho_arquivo, FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])], null=True, blank=True)
     def __str__(self):
         return self.titulo

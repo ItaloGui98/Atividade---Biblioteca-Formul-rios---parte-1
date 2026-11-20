@@ -1,4 +1,111 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView
+)
+
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+
+from .models import Livro, Autor
+from .forms import AutorForm, LivroForm
+
+
+# LISTAGEM DE LIVROS
+class LivroListView(ListView):
+    model = Livro
+    template_name = 'biblioteca/listar_livros.html'
+    context_object_name = 'livros'
+    ordering = ['titulo']
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto['autores'] = Autor.objects.all()
+
+        return contexto
+
+
+# DETALHES DO AUTOR
+class AutorDetailView(DetailView):
+    model = Autor
+    template_name = 'biblioteca/autor.html'
+    context_object_name = 'autor'
+    pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto['livros'] = self.object.livros.all()
+
+        return contexto
+
+
+# CADASTRO DE AUTOR
+class AutorCreateView(CreateView):
+    model = Autor
+    form_class = AutorForm
+    template_name = 'biblioteca/novo_autor.html'
+    success_url = reverse_lazy('listar_livros')
+
+
+# CADASTRO DE LIVRO
+class LivroCreateView(CreateView):
+    model = Livro
+    form_class = LivroForm
+    template_name = 'biblioteca/forms/form_livros.html'
+    success_url = reverse_lazy('listar_livros')
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto['titulo_pagina'] = 'Novo livro'
+        contexto['texto_botao'] = 'Cadastrar livro'
+
+        return contexto
+
+
+# EDIÇÃO DE LIVRO
+class LivroUpdateView(UpdateView):
+    model = Livro
+    form_class = LivroForm
+    template_name = 'biblioteca/forms/form_livros.html'
+    context_object_name = 'livro'
+    success_url = reverse_lazy('listar_livros')
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto['titulo_pagina'] = 'Editar livro'
+        contexto['texto_botao'] = 'Salvar alterações'
+
+        return contexto
+
+
+# EXCLUSÃO DE LIVRO
+class LivroDeleteView(DeleteView):
+    model = Livro
+    template_name = 'biblioteca/livro_delete.html'
+    context_object_name = 'livro'
+    success_url = reverse_lazy('listar_livros')
+
+
+# PÁGINA SOBRE
+class SobreView(TemplateView):
+    template_name = 'biblioteca/sobre.html'
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+
+        contexto['total_livros'] = Livro.objects.count()
+
+        contexto['livros_disponiveis'] = Livro.objects.filter(
+            disponivel=True
+        ).count()
+
+        return contexto
+
+""" from django.shortcuts import get_object_or_404, render, redirect
 from .models import Livro, Autor
 from .forms import AutorForm, LivroForm
 
@@ -36,7 +143,7 @@ def cadastrar_editar_livro(request, livro_id=None):
         livro = None
 
     if request.method == 'POST':
-        form = LivroForm(request.POST, instance=livro)
+        form = LivroForm(request.POST, request.FILES, instance=livro)
         if form.is_valid():
             livro_salvo = form.save()
 
@@ -55,3 +162,4 @@ def cadastrar_editar_livro(request, livro_id=None):
     }
 
     return render(request, 'biblioteca/forms/form_livros.html', contexto)
+"""
