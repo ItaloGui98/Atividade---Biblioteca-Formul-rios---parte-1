@@ -130,7 +130,7 @@
                     Indisponível
                 {% endif %}
             </td>
-            
+
             <td>
                 {% if livro.capa %}
                     <img src="{{ livro.capa.url }}" alt="Capa do livro" width="100">
@@ -155,7 +155,7 @@
         {% endfor %}
 
     </table>
-    <a class="botao" href="{% url 'novo_livro' %}">
+    <a class="botao" href="{% url 'cadastrar_livro' %}">
         Cadastrar Novo Livro
     </a>
 
