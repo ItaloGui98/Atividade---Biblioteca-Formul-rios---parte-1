@@ -75,3 +75,15 @@ Na Mini Biblioteca, são utilizados arquivos estáticos para a aparência do sis
 c) Isso acontece porque o Django, por padrão, não exclui automaticamente os arquivos físicos quando um registro é removido ou quando uma imagem é substituída. Tendo em vista o longo prazo, isso pode ocupar espaço desnecessário no servidor, acumulando arquivos que não são mais utilizados.
 
 d) Porque um arquivo pode ter sua extensão alterada para .jpg ou .png sem realmente ser uma imagem. Dessa forma, o servidor também deve verificar o conteúdo real do arquivo, limitar seu tamanho, aceitar apenas formatos seguros, gerar nomes de arquivos adequados e impedir a execução de arquivos enviados, o que já se relaciona com os tipos de validação.
+
+Erro ao arquivo não possuir extensão adequada: File extension “webp” is not allowed. Allowed extensions are: jpg, jpeg, png.
+
+### 3.1 Perguntas
+
+a) A própria CreateView controla os métodos GET e POST automaticamente. Quando o formulário é inválido, a página é exibida novamente com os erros de validação, permitindo que o usuário corrija as informações.
+
+b) Porque a CreateView utiliza internamente os métodos do Django que já recebem os arquivos enviados pelo formulário. Assim, não se torna necessário passar request.FILES manualmente.
+
+c) Porque o GET serve para exibir a confirmação, enquanto o POST confirma a ação de exclusão. Se a exclusão acontecesse em um GET, um simples acesso ao link poderia apagar o livro sem confirmação, causando exclusões acidentais.
+
+d) Uma vantagem das CBVs é que elas reduzem de forma considerável a repetição de código, e oferecem funcionalidades prontas do Django. Uma desvantagem é que podem ser mais difíceis de entender inicialmente, principalmente quando possuem muitas heranças e métodos. Com isso, eu escolheria uma FBV quando precisasse implementar uma operação simples e específica, com pouca lógica e sem necessidade das funcionalidades de uma classe genérica.

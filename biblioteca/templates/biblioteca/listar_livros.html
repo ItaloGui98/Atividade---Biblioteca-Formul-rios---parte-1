@@ -94,6 +94,7 @@
             <th>Autor</th>
             <th>Ano de Publicação</th>
             <th>Status</th>
+            <th>Capa</th>
             <th>Ações</th>
         </tr>
 
@@ -140,7 +141,8 @@
             </td>
 
             <td>
-                <a href="{% url 'editar_livro' livro.id %}">Editar</a>
+                <a href="{% url 'editar_livro' livro.id %}">Editar<br></a>
+                <a href="{% url 'excluir_livro' pk=livro.id %}">Excluir</a>
             </td>
         </tr>
 
