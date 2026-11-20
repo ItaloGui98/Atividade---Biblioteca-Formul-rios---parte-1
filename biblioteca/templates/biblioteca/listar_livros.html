@@ -130,6 +130,14 @@
                     Indisponível
                 {% endif %}
             </td>
+            
+            <td>
+                {% if livro.capa %}
+                    <img src="{{ livro.capa.url }}" alt="Capa do livro" width="100">
+                {% else %}
+                    Nenhuma capa disponível
+                {% endif %}
+            </td>
 
             <td>
                 <a href="{% url 'editar_livro' livro.id %}">Editar</a>

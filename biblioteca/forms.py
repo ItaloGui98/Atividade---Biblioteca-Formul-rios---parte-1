@@ -30,6 +30,9 @@ class LivroForm(forms.ModelForm):
             'autores',
             'ano_publicacao',
             'disponivel',
+            'paginas',
+            'isbn',
+            'capa',
         ]
 
         widgets = {
