@@ -50,7 +50,7 @@ Estratégia: clean_<campo>.
 
 Justificativa: permite utilizar o método strip() para remover os espaços em branco do início e do final do título antes de salvar o valor.
 
-3. O número de páginas deve ser no máximo 5000.**
+3. O número de páginas deve ser no máximo 5000.
 
 Estratégia: validators=[...].
 
@@ -61,3 +61,17 @@ Justificativa: podemos utilizar o MaxValueValidator(5000) para estabelecer um li
 Estratégia: clean().
 
 Justificativa: essa regra depende da relação entre dois campos: a disponibilidade do livro e o ISBN. Portanto, precisamos verificar os dois valores ao mesmo tempo.
+
+### 2.2 Perguntas
+
+a) Se esquecermos request.FILES, o Django não receberá o arquivo enviado, fazendo com que a capa fique vazia, mesmo que tenha sido selecionada. Caso o enctype="multipart/form-data" também seja esquecido no formulário HTML, o navegador não enviará o arquivo corretamente ao servidor. Em ambos os casos, não apareceram avisos automáticos no formulário. O cadastro pode até funcionar, mas o livro ficará sem capa.
+
+b) 
+- STATICFILES_DIRS / {% static %}: são utilizados para arquivos estáticos do projeto, como CSS, JavaScript, ícones e imagens que fazem parte da interface.
+
+- MEDIA_ROOT / .url: são utilizados para arquivos enviados pelos usuários, como as capas dos livros.
+Na Mini Biblioteca, são utilizados arquivos estáticos para a aparência do sistema e arquivos de mídia para armazenar as capas cadastradas.
+
+c) Isso acontece porque o Django, por padrão, não exclui automaticamente os arquivos físicos quando um registro é removido ou quando uma imagem é substituída. Tendo em vista o longo prazo, isso pode ocupar espaço desnecessário no servidor, acumulando arquivos que não são mais utilizados.
+
+d) Porque um arquivo pode ter sua extensão alterada para .jpg ou .png sem realmente ser uma imagem. Dessa forma, o servidor também deve verificar o conteúdo real do arquivo, limitar seu tamanho, aceitar apenas formatos seguros, gerar nomes de arquivos adequados e impedir a execução de arquivos enviados, o que já se relaciona com os tipos de validação.
