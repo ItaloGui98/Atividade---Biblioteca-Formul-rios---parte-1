@@ -94,6 +94,7 @@
             <th>Autor</th>
             <th>Ano de Publicação</th>
             <th>Status</th>
+            <th>Capa</th>
             <th>Ações</th>
         </tr>
 
@@ -132,7 +133,16 @@
             </td>
 
             <td>
-                <a href="{% url 'editar_livro' livro.id %}">Editar</a>
+                {% if livro.capa %}
+                    <img src="{{ livro.capa.url }}" alt="Capa do livro" width="100">
+                {% else %}
+                    Nenhuma capa disponível
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'editar_livro' livro.id %}">Editar<br></a>
+                <a href="{% url 'excluir_livro' pk=livro.id %}">Excluir</a>
             </td>
         </tr>
 
@@ -147,7 +157,7 @@
         {% endfor %}
 
     </table>
-    <a class="botao" href="{% url 'novo_livro' %}">
+    <a class="botao" href="{% url 'cadastrar_livro' %}">
         Cadastrar Novo Livro
     </a>
 
